@@ -1,4 +1,5 @@
 // ComfyUI.mxToolkit.Slider2D v.0.9.11 - Max Smirnov 2024
+
 import { app } from "../../scripts/app.js";
 
 class MXSlider2D
@@ -194,7 +195,12 @@ class MXSlider2D
                 this.intpos.y = (this.properties.valueY-this.properties.minY)/(this.properties.maxY-this.properties.minY);
                 this.onPropertyChanged("valueX");
                 this.onPropertyChanged("valueY");
-                this.updateThisNodeGraph();
+                //this.updateThisNodeGraph();
+                if (typeof this.updateThisNodeGraph === 'function') {
+                    this.updateThisNodeGraph();
+                } else if (typeof this.setDirtyCanvas === 'function') {
+                    this.setDirtyCanvas(true);
+                }
                 this.graph.setisChangedFlag(this.id);
                 return true;
             }
@@ -235,7 +241,12 @@ class MXSlider2D
             this.intpos.y = vY;
             this.properties.valueX = Math.round(rnX*(this.properties.minX + (this.properties.maxX - this.properties.minX) * this.intpos.x))/rnX;
             this.properties.valueY = Math.round(rnY*(this.properties.minY + (this.properties.maxY - this.properties.minY) * this.intpos.y))/rnY;
-            this.updateThisNodeGraph?.();
+            //this.updateThisNodeGraph?.();
+            if (typeof this.updateThisNodeGraph === 'function') {
+                this.updateThisNodeGraph();
+            } else if (typeof this.setDirtyCanvas === 'function') {
+                this.setDirtyCanvas(true);
+            }
             if ( this.properties.valueX !== prevX || this.properties.valueY !== prevY ) this.graph.setisChangedFlag(this.id);
         }
 
